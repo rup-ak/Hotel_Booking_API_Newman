@@ -46,6 +46,10 @@ npm install -g newman-reporter-htmlextra
 
 ## Newman Report Summary:
 
-![image](https://github.com/rup-ak/Hotel_Booking_API_Newman/assets/93119678/87e6dc4c-9388-42b1-8ab2-06ff76a02e56)
+![hotelbooking report 1 ss](https://github.com/rup-ak/Hotel_Booking_API_Newman/assets/93119678/28b33bc7-f9c2-4dad-b3a1-c7f6416320c0)
 
-![image](https://github.com/rup-ak/Hotel_Booking_API_Newman/assets/93119678/1b091748-f658-4b3d-a445-35edcbada210)
+![hotelbooking report 1 1 ss](https://github.com/rup-ak/Hotel_Booking_API_Newman/assets/93119678/10fc12cc-a5f0-47c2-9fd3-fcde08187cf0)
+
+and the 2nd type of report (HTML report)
+
+![hotelbooking report 2 ss](https://github.com/rup-ak/Hotel_Booking_API_Newman/assets/93119678/8840a817-4650-4263-a720-9b3564355204)
