@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "401a18bb-bf1b-43a1-89ab-be44a962a2ab",
+		"_postman_id": "5255959e-0468-4a1c-8f67-4848e3686871",
 		"name": "HotelBooking",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26927943",
-		"_collection_link": "https://winter-resonance-621010.postman.co/workspace/First-Work~3d2fd0bc-4bdb-4539-af48-528f8e4d03f3/collection/26927943-401a18bb-bf1b-43a1-89ab-be44a962a2ab?action=share&source=collection_link&creator=26927943"
+		"_exporter_id": "26927943"
 	},
 	"item": [
 		{
@@ -36,13 +35,17 @@
 							"pm.environment.set(\"checkin\", today.format(\"YYYY-MM-DD\"))",
 							"pm.environment.set(\"checkout\", today.add(5, 'day').format(\"YYYY-MM-DD\"))",
 							"",
+							"var additionalneeds=pm.variables.replaceIn(\"Breakfast\")",
+							"pm.environment.set(\"additionalneeds\",additionalneeds);",
+							"",
 							"",
 							"",
 							"",
 							"",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				},
 				{
@@ -57,7 +60,8 @@
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -151,8 +155,20 @@
 						"exec": [
 							"var tokenData = pm.response.json()",
 							"",
-							"pm.environment.set(\"token\",tokenData.token)"
+							"pm.environment.set(\"token\",tokenData.token)",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});"
 						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
 						"type": "text/javascript"
 					}
 				}
@@ -183,18 +199,81 @@
 		},
 		{
 			"name": "Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json()\r",
+							"\r",
+							"pm.test(\"First name Validation\", function () {\r",
+							"     pm.expect(responseBody).to.be.an('object');\r",
+							"     pm.expect(responseBody.firstname).to.be.a('string');\r",
+							"     pm.expect(responseBody.firstname).to.not.be.empty;\r",
+							"     pm.expect(responseBody.firstname).to.equal(\"David\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Last name Validation\", function () {\r",
+							"    pm.expect(responseBody).to.be.an('object');\r",
+							"    pm.expect(responseBody.lastname).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseBody.lastname).to.equal(\"Warner\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Price Validation\", function () {\r",
+							"     pm.expect(responseBody).to.be.an('object');\r",
+							"     pm.expect(responseBody.totalprice).to.be.a('number');\r",
+							"     pm.expect(responseBody.totalprice).to.equal(pm.environment.get(\"price\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Depositpaid\", function () {\r",
+							"     pm.expect(responseBody.depositpaid).to.be.a('boolean');\r",
+							"     pm.expect(responseBody).to.have.property('depositpaid');\r",
+							"     pm.expect(responseBody.depositpaid).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"CheckIn\", function () {\r",
+							"    pm.expect(responseBody).to.be.an('object');\r",
+							"    pm.expect(responseBody.bookingdates).to.have.property('checkin').that.is.a('string');\r",
+							"    pm.expect(responseBody.bookingdates.checkin).to.eql(pm.environment.get(\"checkin\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"CheckOut\", function () {\r",
+							"    pm.expect(responseBody).to.be.an('object');\r",
+							"    pm.expect(responseBody.bookingdates).to.have.property('checkout').that.is.a('string');\r",
+							"    pm.expect(responseBody.bookingdates.checkout).to.eql(pm.environment.get(\"checkout\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"AdditionalNeeds\", function () {\r",
+							"     pm.expect(pm.response.json()).to.be.an('object');\r",
+							"     pm.expect(pm.response.json().additionalneeds).to.exist;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Cookie",
-						"value": "token = {{token}}",
-						"type": "text"
+						"value": "token = {{token}}"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"firstname\" : \"{{firstName}}\",\n\t\"lastname\" : \"{{lastName}}\",\n\t\"totalprice\" : {{price}},\n\t\"depositpaid\" : true,\n\t\"bookingdates\" : {\n    \t\"checkin\" : \"{{checkin}}\",\n    \t\"checkout\" : \"{{checkout}}\"\n\t},\n\t\"additionalneeds\" : \"Breakfast\"\n}\n",
+					"raw": "{\n\t\"firstname\" : \"David\",\n\t\"lastname\" : \"Warner\",\n\t\"totalprice\" : {{price}},\n\t\"depositpaid\" : true,\n\t\"bookingdates\" : {\n    \t\"checkin\" : \"{{checkin}}\",\n    \t\"checkout\" : \"{{checkout}}\"\n\t},\n\t\"additionalneeds\" : \"Breakfast\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
